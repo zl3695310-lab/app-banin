@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مصاريفي</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="admin-page">
+<header class="admin-header">
+    <div>
+        <h1>مصاريفي</h1>
+        <p>عرض المصاريف التي قمت بتسجيلها</p>
+    </div>
+<a href="/employee.html">
+    <button class="logout-button">العودة للوحة الموظف</button>
+</a>
+</header>
+<main class="dashboard">
+<div style="overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; text-align: center;">
+
+        <thead>
+            <tr>
+                <th style="padding: 12px;">#</th>
+                <th style="padding: 12px;">المبلغ</th>
+                <th style="padding: 12px;">الوصف</th>
+                <th style="padding: 12px;">التاريخ</th>
+                <th style="padding: 12px;">الوصل</th>
+            </tr>
+        </thead>
+
+        <tbody id="expensesTable">
+            <tr>
+                <td colspan="5" style="padding: 20px;">
+                    جاري تحميل المصاريف...
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+</main>
+<footer class="admin-footer">
+    نظام إدارة مصاريف الموظفين
+</footer>
+</div>
+<script>
+fetch("/my-expenses")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(expenses) {
+
+        const table = document.getElementById("expensesTable");
+
+        if (expenses.length === 0) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5" style="padding: 20px;">
+                        لا توجد مصاريف مسجلة
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        table.innerHTML = "";
+
+        expenses.forEach(function(expense, index) {
+
+            let receipt = "-";
+
+            if (expense.image) {
+                receipt = '<a href="' + expense.image + '" target="_blank">عرض الوصل</a>';
+            }
+
+            table.innerHTML += `
+                <tr>
+                    <td style="padding: 12px;">${index + 1}</td>
+                    <td style="padding: 12px;">${expense.amount}</td>
+                    <td style="padding: 12px;">${expense.description || "-"}</td>
+                    <td style="padding: 12px;">${expense.expense_date}</td>
+                    <td style="padding: 12px;">${receipt}</td>
+                </tr>
+            `;
+
+        });
+
+    })
+    .catch(function(error) {
+
+        console.error(error);
+
+        document.getElementById("expensesTable").innerHTML = `
+            <tr>
+                <td colspan="5" style="padding: 20px;">
+                    حدث خطأ أثناء تحميل المصاريف
+                </td>
+            </tr>
+        `;
+
+    });
+</script>
+</body>
+</html>

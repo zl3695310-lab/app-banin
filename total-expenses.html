@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إجمالي المصاريف</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-page">
+
+<header class="admin-header">
+    <div>
+        <h1>إجمالي المصاريف</h1>
+        <p>إجمالي جميع مصاريفك المسجلة</p>
+    </div>
+
+<a href="/employee.html">
+    <button class="logout-button">العودة للوحة الموظف</button>
+</a>
+</header>
+
+<main class="dashboard">
+
+<div class="card-icon">💰</div>
+
+<h3>المجموع الكلي</h3>
+
+<h1 id="totalAmount">جاري الحساب...</h1>
+</main>
+<footer class="admin-footer">
+    نظام إدارة مصاريف الموظفين
+</footer>
+</div>
+<script>
+fetch("/my-expenses")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(expenses) {
+
+        let total = 0;
+
+        expenses.forEach(function(expense) {
+            total += Number(expense.amount);
+        });
+
+        document.getElementById("totalAmount").textContent =
+            total.toLocaleString("en-US") + " دينار";
+
+    })
+    .catch(function(error) {
+
+        console.error(error);
+
+        document.getElementById("totalAmount").textContent =
+            "حدث خطأ";
+
+    });
+</script>
+</body>
+</html>

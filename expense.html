@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة مصروف</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="admin-header">
+    <div>
+        <h1>إضافة مصروف</h1>
+        <p>تسجيل مصروف جديد</p>
+    </div>
+
+    <a href="/employee.html">
+        <button class="logout-button">العودة للوحة الموظف</button>
+    </a>
+</header>
+
+<main class="dashboard">
+
+    <div class="welcome-box">
+        <h2>بيانات المصروف</h2>
+        <p>أدخل تفاصيل المصروف أدناه.</p>
+    </div>
+
+    <div class="dashboard-card">
+
+       <form action="/add-expense" method="POST" enctype="multipart/form-data">
+
+
+            <div class="form-group">
+                <label for="amount">مبلغ المصروف</label>
+                <input type="number" id="amount" name="amount" placeholder="أدخل المبلغ" step="0.01" required>
+            </div>
+            
+<div class="form-group">
+    <label for="description">وصف المصروف</label>
+    <input type="text" id="description" name="description" placeholder="مثلاً: وقود، طعام، نقل">
+</div>
+            <div class="form-group">
+    <label for="image">صورة الوصل</label>
+    <input type="file" id="image" name="image" accept="image/*">
+</div>
+
+            <div class="form-group">
+                <label for="expense_date">تاريخ المصروف</label>
+                <input type="date" id="expense_date" name="expense_date" required>
+            </div>
+
+            <button type="submit" class="login-button">حفظ المصروف</button>
+
+        </form>
+
+    </div>
+
+</main>
+
+<footer class="admin-footer">
+    نظام إدارة مصاريف الموظفين
+</footer>
+</body>
+</html>

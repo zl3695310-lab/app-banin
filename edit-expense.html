@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعديل المصروف</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="admin-page">
+<a href="/admin-expenses.html">
+    <button class="logout-button">العودة للمصاريف</button>
+</a>
+<div class="dashboard-card">
+
+    <form id="editExpenseForm">
+
+        <label>المبلغ</label>
+        <input type="number" id="amount" step="0.01" required>
+
+        <br><br>
+
+        <label>الوصف</label>
+        <input type="text" id="description">
+
+        <br><br>
+
+        <label>التاريخ</label>
+        <input type="date" id="expense_date" required>
+
+        <br><br>
+
+        <button type="submit">حفظ التعديل</button>
+
+    </form>
+
+</div>
+</div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+if (!id) {
+    alert("رقم المصروف غير موجود");
+    window.location.href = "/admin-expenses.html";
+}
+
+fetch("/expense/" + id)
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(expense) {
+
+        if (expense.success === false) {
+            alert(expense.message);
+            window.location.href = "/admin-expenses.html";
+            return;
+        }
+
+        document.getElementById("amount").value = expense.amount;
+        document.getElementById("description").value = expense.description || "";
+        document.getElementById("expense_date").value = expense.expense_date;
+
+    })
+    .catch(function(error) {
+        console.error(error);
+        alert("حدث خطأ أثناء تحميل المصروف");
+    });
+    document.getElementById("editExpenseForm").addEventListener("submit", function(event) {
+event.preventDefault();
+fetch("/admin/update-expense", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: id, amount: document.getElementById("amount").value, description: document.getElementById("description").value, expense_date: document.getElementById("expense_date").value }) }) .then(function(response) { return response.json(); }) .then(function(result) {
+if (result.success) {
+    alert("تم تعديل المصروف بنجاح");
+    window.location.href = "/admin-expenses.html";
+} else {
+    alert(result.message);
+}
+}) .catch(function(error) { console.error(error); alert("حدث خطأ أثناء تعديل المصروف"); });
+});
+</script>
+
+</body>
+</html>
